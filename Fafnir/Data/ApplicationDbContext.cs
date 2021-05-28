@@ -12,5 +12,7 @@ namespace Fafnir.Data
             : base(options)
         {
         }
+
+        public DbSet<Settings> Settings { get; set; }
     }
 }

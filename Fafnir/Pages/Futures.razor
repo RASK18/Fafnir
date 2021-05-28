@@ -1,0 +1,31 @@
+﻿@page "/futures"
+@using Fafnir.Data
+@using System.Security.Claims
+@inject AuthenticationStateProvider _authenticationStateProvider
+
+<AuthorizeView>
+        <NotAuthorized>
+            <h1>NotAuthorized</h1>
+        </NotAuthorized>
+        <Authorized>
+            <h1>Key: @_settings.Key</h1>
+</Authorized>
+    </AuthorizeView>
+
+@code {
+
+    private Settings _settings;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        AuthenticationState authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal user = authState.User;
+
+        if (user.Identity?.IsAuthenticated != true) return;
+
+        string id = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        _settings = new Settings();
+    }
+}
